@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Contact us - Amazon Student{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="form-wrap card">
+      <p class="eyebrow">We are listening</p>
+      <h1>Contact and feedback</h1>
+      <p class="hint" style="margin-bottom:1.5rem;">
+        Ask a question or tell us how we can improve. We store your message so
+        the team can respond.
+      </p>
+
+      <form method="POST" action="{{ url_for('contact') }}">
+        <div class="field">
+          <label for="name">Your name</label>
+          <input type="text" id="name" name="name" value="{{ name }}"
+                 required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" value="{{ email }}"
+                 required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="5"
+                    required minlength="10">{{ message }}</textarea>
+          <p class="hint">At least 10 characters.</p>
+        </div>
+        <button class="btn" type="submit">Send message</button>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}

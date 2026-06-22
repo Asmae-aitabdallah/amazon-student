@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+  base.html - the shared layout every page extends.
+  Child templates fill the named block sections below.
+  The accessibility script is loaded in the head so preferences apply
+  before the body paints (avoids a flash of the wrong theme).
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- viewport meta = the page scales correctly on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Amazon Student{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</head>
+<body>
+  <!-- Skip link for keyboard and screen-reader users -->
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Trademark / academic disclaimer, shown on every page -->
+  <div class="disclaimer">
+    Student prototype for educational use only. Not affiliated with or endorsed by Amazon.
+  </div>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="{{ url_for('home') }}">
+        amazon<span class="smile">student</span>
+      </a>
+      <div class="nav-links">
+        <a href="{{ url_for('home') }}">Home</a>
+        {% if session.user_id %}
+          <a href="{{ url_for('dashboard') }}">Dashboard</a>
+          <a href="{{ url_for('settings') }}">Settings</a>
+          <a href="{{ url_for('contact') }}">Contact</a>
+          <span class="nav-badge">{{ session.role }}</span>
+          <a href="{{ url_for('logout') }}">Log out</a>
+        {% else %}
+          <a href="{{ url_for('contact') }}">Contact</a>
+          <a href="{{ url_for('login') }}">Log in</a>
+          <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  <!-- Flash messages (errors, confirmations) rendered once for all pages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flashes" role="status" aria-live="polite">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>
+        Amazon Student - Emerging Talent Programs (prototype).
+        Built for an academic exercise. T-Level information is illustrative;
+        always confirm details with official sources.
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

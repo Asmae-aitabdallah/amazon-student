@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Home - Amazon Student{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow" style="color: var(--accent);">Emerging Talent Programs</p>
+    <h1>Start your technical career with T-Levels</h1>
+    <p>
+      Explore T-Level pathways, industry placements, and what they mean for
+      students, parents, and educators. Sign in to see guidance tailored to you.
+    </p>
+    <div class="actions">
+      {% if session.user_id %}
+        <a class="btn" href="{{ url_for('dashboard') }}">Go to dashboard</a>
+      {% else %}
+        <a class="btn" href="{{ url_for('register') }}">Create an account</a>
+        <a class="btn btn-secondary" href="{{ url_for('login') }}" style="color:#fff;border-color:#fff;">Log in</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="grid">
+      <div class="card">
+        <p class="eyebrow">Students</p>
+        <h2>Find your pathway</h2>
+        <p>Understand T-Level subjects, entry requirements, and the 45-day
+           industry placement at the heart of every course.</p>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Parents &amp; carers</p>
+        <h2>Support their choice</h2>
+        <p>See how T-Levels compare to A-Levels and apprenticeships, and what
+           progression routes open up afterwards.</p>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Educators</p>
+        <h2>Guide and deliver</h2>
+        <p>Access framing on delivery, employer engagement, and how to advise
+           learners on next steps.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

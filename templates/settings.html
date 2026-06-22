@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Settings - Amazon Student{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="form-wrap card">
+      <p class="eyebrow">Accessibility</p>
+      <h1>Display settings</h1>
+      <p class="hint" style="margin-bottom:1.5rem;">
+        These settings are saved on this device and apply across every page.
+      </p>
+
+      <!--
+        Each toggle is a checkbox styled as a switch. The IDs (toggle-theme,
+        toggle-contrast, toggle-text) are read by static/js/main.js, which
+        persists the choice in localStorage and applies it to <html>.
+      -->
+      <div class="toggle-row">
+        <div>
+          <label for="toggle-theme" style="margin:0;">Dark mode</label>
+          <p class="hint" style="margin:0;">Lighter text on a dark background.</p>
+        </div>
+        <span class="switch">
+          <input type="checkbox" id="toggle-theme">
+          <span class="slider" aria-hidden="true"></span>
+        </span>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <label for="toggle-text" style="margin:0;">Larger text</label>
+          <p class="hint" style="margin:0;">Increases the base font size.</p>
+        </div>
+        <span class="switch">
+          <input type="checkbox" id="toggle-text">
+          <span class="slider" aria-hidden="true"></span>
+        </span>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <label for="toggle-contrast" style="margin:0;">High contrast</label>
+          <p class="hint" style="margin:0;">Maximum contrast with bold outlines.</p>
+        </div>
+        <span class="switch">
+          <input type="checkbox" id="toggle-contrast">
+          <span class="slider" aria-hidden="true"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# SQLite database (regenerated on first run by init_db)
+database.db
+
+# Environment / secrets
+.env

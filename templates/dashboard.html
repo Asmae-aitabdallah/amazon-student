@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Amazon Student{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <p class="eyebrow">Signed in as {{ session.email }}</p>
+    <h1>Your dashboard</h1>
+
+    <!--
+      Role-based routing: we show the primary call-to-action that matches the
+      user's role, taken from their session. The role was set at login from
+      the database, so it cannot be tampered with client-side.
+    -->
+    {% if session.role == 'student' %}
+      <p>Here is guidance prepared for students.</p>
+      <a class="btn" href="{{ url_for('student_info') }}">View student information</a>
+    {% elif session.role == 'parent' %}
+      <p>Here is guidance prepared for parents and carers.</p>
+      <a class="btn" href="{{ url_for('parent_info') }}">View parent information</a>
+    {% elif session.role == 'educator' %}
+      <p>Here is guidance prepared for educators.</p>
+      <a class="btn" href="{{ url_for('educator_info') }}">View educator information</a>
+    {% endif %}
+
+    <div class="grid" style="margin-top:2rem;">
+      <div class="card">
+        <p class="eyebrow">Accessibility</p>
+        <h2>Adjust your view</h2>
+        <p>Turn on dark mode, larger text, or high contrast.</p>
+        <a class="btn btn-secondary" href="{{ url_for('settings') }}">Open settings</a>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Questions?</p>
+        <h2>Get in touch</h2>
+        <p>Send us feedback or ask about the programs.</p>
+        <a class="btn btn-secondary" href="{{ url_for('contact') }}">Contact us</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
