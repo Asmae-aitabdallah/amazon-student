@@ -23,6 +23,7 @@ Amazon.com, Inc. or the UK Department for Education.
 import os
 import re
 import sqlite3
+import uuid
 from functools import wraps
 
 from flask import (
@@ -35,11 +36,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
-# SECRET_KEY signs the session cookie. os.urandom is fine for local dev, but
-# it changes on every restart (logging everyone out). In production, set a
-# fixed value via the FLASK_SECRET_KEY environment variable.
 app.config["SECRET_KEY"] = os.environ.get("FLASK_SECRET_KEY", os.urandom(32))
 app.config["DATABASE"] = os.path.join(app.root_path, "database.db")
+app.config["UPLOAD_FOLDER"] = os.path.join(app.root_path, "static", "uploads", "avatars")
+app.config["MAX_CONTENT_LENGTH"] = 2 * 1024 * 1024  # 2 MB limit
+
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", "gif", "webp"}
+
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Hardening the session cookie:
 app.config.update(
@@ -79,6 +85,7 @@ def init_db():
             email         TEXT UNIQUE NOT NULL,
             password_hash TEXT NOT NULL,
             role          TEXT NOT NULL,
+            avatar        TEXT,
             created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
 
@@ -91,7 +98,12 @@ def init_db():
         );
         """
     )
-    db.commit()
+    # Migration: add avatar column to existing databases that predate this feature.
+    try:
+        db.execute("ALTER TABLE users ADD COLUMN avatar TEXT")
+        db.commit()
+    except sqlite3.OperationalError:
+        pass  # column already exists
     db.close()
 
 
@@ -125,6 +137,18 @@ def login_required(view):
             return redirect(url_for("login"))
         return view(*args, **kwargs)
     return wrapped
+
+
+# --- Template context --------------------------------------------------------
+
+@app.context_processor
+def inject_avatar():
+    """Make the current user's avatar filename available in every template."""
+    if "user_id" not in session:
+        return {"current_avatar": None}
+    db = get_db()
+    row = db.execute("SELECT avatar FROM users WHERE id = ?", (session["user_id"],)).fetchone()
+    return {"current_avatar": row["avatar"] if row else None}
 
 
 # --- Routes: public ----------------------------------------------------------
@@ -262,11 +286,35 @@ def educator_info():
     return render_template("educator_info.html")
 
 
-@app.route("/settings")
+@app.route("/settings", methods=["GET", "POST"])
 @login_required
 def settings():
-    # Accessibility preferences are stored client-side (localStorage) so they
-    # apply instantly without a round-trip. See static/js/main.js.
+    if request.method == "POST":
+        file = request.files.get("avatar")
+        if not file or not file.filename:
+            flash("No file selected.", "error")
+            return redirect(url_for("settings"))
+        if not allowed_file(file.filename):
+            flash("Only image files are allowed (PNG, JPG, GIF, WebP).", "error")
+            return redirect(url_for("settings"))
+
+        ext = file.filename.rsplit(".", 1)[1].lower()
+        filename = f"{uuid.uuid4().hex}.{ext}"
+        os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
+
+        db = get_db()
+        old = db.execute("SELECT avatar FROM users WHERE id = ?", (session["user_id"],)).fetchone()
+        if old and old["avatar"]:
+            old_path = os.path.join(app.config["UPLOAD_FOLDER"], old["avatar"])
+            if os.path.exists(old_path):
+                os.remove(old_path)
+
+        db.execute("UPDATE users SET avatar = ? WHERE id = ?", (filename, session["user_id"]))
+        db.commit()
+        flash("Profile picture updated.", "success")
+        return redirect(url_for("settings"))
+
     return render_template("settings.html")
 
 

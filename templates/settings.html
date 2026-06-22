@@ -4,9 +4,32 @@
 {% block content %}
 <section class="section">
   <div class="container">
+
+    <div class="form-wrap card" style="margin-bottom:1.5rem;">
+      <p class="eyebrow">Account</p>
+      <h1 style="margin-top:0;">Profile picture</h1>
+      <p class="hint" style="margin-bottom:1.25rem;">Optional. JPG, PNG, GIF or WebP — max 2 MB.</p>
+
+      {% if current_avatar %}
+        <img src="{{ url_for('static', filename='uploads/avatars/' ~ current_avatar) }}"
+             alt="Your profile picture"
+             class="avatar-preview">
+      {% else %}
+        <div class="avatar-placeholder">{{ session.email[0].upper() }}</div>
+      {% endif %}
+
+      <form method="post" enctype="multipart/form-data" style="margin-top:1rem;">
+        <div class="field">
+          <label for="avatar">Upload new picture</label>
+          <input type="file" id="avatar" name="avatar" accept="image/*">
+        </div>
+        <button type="submit" class="btn">Save picture</button>
+      </form>
+    </div>
+
     <div class="form-wrap card">
       <p class="eyebrow">Accessibility</p>
-      <h1>Display settings</h1>
+      <h2 style="margin-top:0;">Display settings</h2>
       <p class="hint" style="margin-bottom:1.5rem;">
         These settings are saved on this device and apply across every page.
       </p>

@@ -9,3 +9,7 @@ database.db
 
 # Environment / secrets
 .env
+
+# Uploaded user files
+static/uploads/avatars/*
+!static/uploads/avatars/.gitkeep

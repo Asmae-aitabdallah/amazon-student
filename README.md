@@ -47,22 +47,26 @@ amazon_student/
 You need Python 3.9+.
 
 ```bash
-# 1. Go into the project folder
-cd amazon_student
+# 1. Clone the repository
+git clone https://github.com/Asmae-aitabdallah/amazon-student.git
+cd amazon-student
 
-# 2. (Recommended) create and activate a virtual environment
+# 2. (Skip if you already have the folder) or just go into the project folder
+# cd amazon_student
+
+# 3. (Recommended) create and activate a virtual environment
 python3 -m venv venv
 source venv/bin/activate        # macOS/Linux
 # venv\Scripts\activate         # Windows (PowerShell)
 
-# 3. Install dependencies
+# 4. Install dependencies
 pip install -r requirements.txt
 
-# 4. (Recommended) set a fixed secret key so sessions survive restarts
+# 5. (Recommended) set a fixed secret key so sessions survive restarts
 export FLASK_SECRET_KEY="change-this-to-a-long-random-string"   # macOS/Linux
 # setx FLASK_SECRET_KEY "change-this-..."                       # Windows
 
-# 5. Run
+# 6. Run
 python app.py
 ```
 
