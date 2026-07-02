@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Ask AI - Amazon Student{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow" style="color: var(--accent);">AI Assistant</p>
+    <h1>Ask our AI assistant</h1>
+    <p>You're asking as a <strong>{{ role }}</strong>, so answers are tailored for you.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="form-wrap">
+      <div class="card">
+        <form method="POST" action="{{ url_for('ai_qa') }}">
+          <div class="field">
+            <label for="question">Your question</label>
+            <textarea id="question" name="question" rows="3">{{ question }}</textarea>
+          </div>
+          <button type="submit" class="btn">Ask</button>
+        </form>
+      </div>
+
+      {% if answer %}
+        <div class="card" style="margin-top: 1.25rem;">
+          <p class="eyebrow">Answer</p>
+          <p>{{ answer }}</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

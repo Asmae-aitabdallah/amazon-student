@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}AI Placement Quiz - Amazon Student{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow" style="color: var(--accent);">AI Placement Quiz</p>
+    <h1>Not sure which account is right for you?</h1>
+    <p>
+      Answer a few quick questions and our AI assistant will suggest whether a
+      <strong>student</strong>, <strong>educator</strong>, or <strong>parent</strong>
+      account fits you best. You can always change it before creating your account.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="form-wrap">
+      <div class="card">
+        <form method="POST" action="{{ url_for('ai_placement') }}">
+          {% for q in questions %}
+            <div class="field">
+              <label for="{{ q.id }}">{{ q.text }}</label>
+              <textarea id="{{ q.id }}" name="{{ q.id }}" rows="2">{{ answers.get(q.id, '') }}</textarea>
+            </div>
+          {% endfor %}
+          <button type="submit" class="btn">Get my suggestion</button>
+        </form>
+      </div>
+
+      {% if result %}
+        <div class="card" style="margin-top: 1.25rem;">
+          <p class="eyebrow">Our suggestion</p>
+          <h2 style="margin-top:0;">{{ result.role|capitalize }} account</h2>
+          <p>{{ result.explanation }}</p>
+          <p class="hint">Confidence: {{ result.confidence }}</p>
+          <a class="btn" href="{{ url_for('register') }}">
+            Continue to registration as {{ result.role }}
+          </a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}
