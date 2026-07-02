@@ -17,12 +17,10 @@
 <body>
   <!-- Skip link for keyboard and screen-reader users -->
   <a class="skip-link" href="#main">Skip to main content</a>
-
   <!-- Trademark / academic disclaimer, shown on every page -->
   <div class="disclaimer">
     Student prototype for educational use only. Not affiliated with or endorsed by Amazon.
   </div>
-
   <header class="site-header">
     <nav class="nav" aria-label="Main navigation">
       <a class="brand" href="{{ url_for('home') }}">
@@ -32,6 +30,7 @@
         <a href="{{ url_for('home') }}">Home</a>
         {% if session.user_id %}
           <a href="{{ url_for('dashboard') }}">Dashboard</a>
+          <a href="{{ url_for('ai_qa') }}">Ask AI</a>
           <a href="{{ url_for('settings') }}">Settings</a>
           <a href="{{ url_for('contact') }}">Contact</a>
           <span class="nav-badge">{{ session.role }}</span>
@@ -42,6 +41,7 @@
           {% endif %}
           <a href="{{ url_for('logout') }}">Log out</a>
         {% else %}
+          <a href="{{ url_for('ai_placement') }}">AI Placement Quiz</a>
           <a href="{{ url_for('contact') }}">Contact</a>
           <a href="{{ url_for('login') }}">Log in</a>
           <a href="{{ url_for('register') }}">Register</a>
@@ -49,7 +49,6 @@
       </div>
     </nav>
   </header>
-
   <!-- Flash messages (errors, confirmations) rendered once for all pages -->
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
@@ -60,11 +59,9 @@
       </div>
     {% endif %}
   {% endwith %}
-
   <main id="main">
     {% block content %}{% endblock %}
   </main>
-
   <footer class="site-footer">
     <div class="container">
       <p>
