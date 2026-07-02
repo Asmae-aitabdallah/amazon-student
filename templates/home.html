@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block title %}Home - Amazon Student{% endblock %}
-
 {% block content %}
 <section class="hero">
   <div class="container">
@@ -16,11 +15,11 @@
       {% else %}
         <a class="btn" href="{{ url_for('register') }}">Create an account</a>
         <a class="btn btn-secondary" href="{{ url_for('login') }}" style="color:#fff;border-color:#fff;">Log in</a>
+        <a class="btn btn-secondary" href="{{ url_for('ai_placement') }}" style="color:#fff;border-color:#fff;">Not sure which account fits? Ask AI</a>
       {% endif %}
     </div>
   </div>
 </section>
-
 <section class="section">
   <div class="container">
     <div class="grid">
@@ -41,6 +40,13 @@
         <h2>Guide and deliver</h2>
         <p>Access framing on delivery, employer engagement, and how to advise
            learners on next steps.</p>
+      </div>
+      <div class="card">
+        <p class="eyebrow">Not sure where you fit?</p>
+        <h2>Take the AI placement quiz</h2>
+        <p>Answer three quick questions and our AI assistant will suggest
+           whether a student, educator, or parent account is right for you.</p>
+        <p><a class="btn" href="{{ url_for('ai_placement') }}">Take the quiz</a></p>
       </div>
     </div>
   </div>
